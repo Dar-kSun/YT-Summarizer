@@ -1,60 +1,57 @@
-# 🚀 YouTube Video Summarizer 🚀
+# YouTube Video Summarizer
 
-### Binge-watch less, learn more!
+A Chrome extension and Python backend that leverages the Google Gemini API to generate summaries from YouTube video transcripts. This project demonstrates a decoupled client-server architecture, with a browser extension acting as the client and a local Flask server providing the core functionality.
 
-Tired of 20-minute videos that could have been a tweet? This extension is your new best friend. With a single click, it uses a powerful AI to instantly distill any YouTube video into a set of key, easy-to-read points.
+## Features
 
-## What's Inside? ✨
+* **On-Demand Summary Generation:** A simple browser action popup allows users to request a video summary with a single click.
+* **Clean User Interface:** A modern and intuitive UI built with standard HTML5, CSS3, and JavaScript.
+* **AI-Powered Summarization:** Utilizes Google's Gemini API for high-quality, context-aware text summarization.
+* **Integrated Copy-to-Clipboard:** Easily copy the generated summary for use in other applications.
+* **Decoupled Architecture:** A stable client-server model improves maintainability by separating frontend logic from backend processing.
 
-* **Instant Knowledge, Zero Waffle:** Get the good stuff from any video without the fluff.
-* **Sleek & Minimalist UI:** Looks so good, you'll want to show it off.
-* **AI-Powered Brains:** We've hooked this up to the Google Gemini API, so you're getting top-tier, context-aware summaries.
-* **Copy & Go:** A dedicated button to copy the summary so you can paste it into your notes, a tweet, or a message to your friends.
-* **Rock-Solid Build:** A stable client-server model means this thing just works.
+## System Architecture
 
-## The Magic Behind the Curtain 🧙‍♂️
+This project is composed of two primary components that communicate via a RESTful API:
 
-This project isn't just one thing; it's a dynamic duo working in perfect harmony:
+1.  **Frontend (Chrome Extension):** The client-side interface built with HTML, CSS, and JavaScript. Its main responsibility is to capture the video ID from the active YouTube tab. When a user initiates a request, it sends a `POST` request with a JSON payload (`{ "video_id": "..." }`) to the backend's API endpoint.
 
-1.  **The Friendly Face (Chrome Extension):** This is the part you see. Built with HTML, CSS, and JavaScript, its job is simple: when you press the button, it taps the backend on the shoulder and says, "Hey, this video right here, please!"
-
-2.  **The Mastermind (Python Server):** This is where the real magic happens. Running silently on your machine, this Flask server:
-    * Catches the request from the extension.
-    * Politely asks YouTube for the video's full transcript.
-    * Sends the transcript to its brainy friend, the **Google Gemini API**, for summarization.
-    * Serves the perfect, clean summary back to the frontend on a silver platter.
+2.  **Backend (Python Flask Server):** A local server that exposes a REST API endpoint (`/api/summarize`). Upon receiving a request, it performs the following tasks:
+    * It uses the `youtube-transcript-api` library to fetch the full transcript for the provided video ID.
+    * It constructs a detailed prompt containing the transcript and sends it to the **Google Gemini API** for processing.
+    * It receives the generated summary from the Gemini API and returns it to the client in a JSON response.
 
 ---
 
-## Your Mission, Should You Choose to Accept It... (Setup Guide)
+## Local Setup and Installation
 
-Ready to get this running? Let's do it. You'll need to set up the backend server and the frontend extension.
+To run this project, you must configure and run both the backend server and the frontend extension.
 
-### Tools You'll Need
+### Prerequisites
 
 * Python 3.8+
-* Google Chrome (or a browser that likes Chrome extensions)
-* A **Google API Key** with the **Gemini API** enabled. Grab one from the [Google AI Studio](https://ai.google.dev/).
+* Google Chrome (or another Chromium-based browser)
+* A **Google API Key** with the **Generative Language API (Gemini)** enabled. This can be obtained from the [Google AI Studio](https://ai.google.dev/).
 
-### Step 1: Get the Code
+### Step 1: Clone the Repository
 
-Clone this repository to your machine and step inside.
+Clone this repository to your local machine using Git.
 
 ```bash
 git clone [https://github.com/your-username/youtube-summarizer.git](https://github.com/your-username/youtube-summarizer.git)
 cd youtube-summarizer
 ```
 
-### Step 2: Awaken the Backend 🐍
+### Step 2: Backend Server Setup
 
-The server is the heart of the operation. Let's get it beating.
+The Flask server must be running for the extension to function.
 
-1.  **Enter the backend lair:**
+1.  **Navigate to the backend directory:**
     ```bash
     cd backend
     ```
 
-2.  **Whip up a virtual environment:** It's like a VIP lounge for our Python packages.
+2.  **Create and activate a Python virtual environment:**
     * **On macOS/Linux:**
         ```bash
         python3 -m venv venv
@@ -66,13 +63,13 @@ The server is the heart of the operation. Let's get it beating.
         .\venv\Scripts\activate
         ```
 
-3.  **Install the dependencies:**
+3.  **Install the required dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
-    *(If you don't have a `requirements.txt`, just run: `pip install Flask Flask-Cors google-generativeai youtube-transcript-api`)*
+    *(Note: If a `requirements.txt` file is not present, install manually: `pip install Flask Flask-Cors google-generativeai youtube-transcript-api`)*
 
-4.  **Tell it the secret password (your API Key):** The server needs your API key to talk to Google. Set it as an environment variable **in the same terminal you're using**.
+4.  **Set the `GOOGLE_API_KEY` Environment Variable:** The server requires this variable to authenticate with the Google API. This must be set in the same terminal session where the server is launched.
     * **On macOS/Linux:**
         ```bash
         export GOOGLE_API_KEY="YOUR_API_KEY_HERE"
@@ -82,31 +79,31 @@ The server is the heart of the operation. Let's get it beating.
         set GOOGLE_API_KEY="YOUR_API_KEY_HERE"
         ```
 
-5.  **Launch!**
+5.  **Run the Flask server:**
     ```bash
     flask --app backend run
     ```
-    You should see text confirming the server is alive and listening on `http://127.0.0.1:5000`. **Keep this terminal open!**
+    The server will start and listen for requests on `http://127.0.0.1:5000`. Keep this terminal window open.
 
-### Step 3: Unleash the Frontend 🤖
+### Step 3: Frontend Extension Setup
 
-Almost there! Let's get the extension into Chrome.
+Load the client-side extension into your browser.
 
-1.  Open Chrome and go to `chrome://extensions`.
-2.  Find the **"Developer mode"** switch in the top-right and flick it on.
+1.  Open Chrome and navigate to the extensions page: `chrome://extensions`.
+2.  Enable **"Developer mode"** via the toggle in the top-right corner.
 3.  Click the **"Load unpacked"** button.
-4.  Navigate to this project's folder and select the **`frontend`** directory.
-5.  The YouTube Summarizer will pop up in your extensions list. Pin it to your toolbar—it's earned it!
+4.  In the file dialog, select the project's **`frontend`** directory.
+5.  The YouTube Video Summarizer extension will be installed. Pin it to your toolbar for easy access.
 
-## Let the Fun Begin! (Usage)
+## Usage
 
-1.  Check that your Python server is still running in its terminal.
-2.  Go to a YouTube video.
-3.  Click the summarizer icon.
-4.  Hit that glorious **"Generate Summary"** button.
-5.  Watch as the summary appears, then copy it and share your newfound knowledge with the world!
+1.  Ensure the Python backend server is running in your terminal.
+2.  Navigate to a YouTube video page in your browser.
+3.  Click the extension's icon in the Chrome toolbar.
+4.  Click the **"Generate Summary"** button to initiate the API call.
+5.  The summary will be displayed in the popup, where it can be copied.
 
-## The Tech Stack 🥞
+## Technology Stack
 
 * **Frontend:** HTML5, CSS3, JavaScript
 * **Backend:** Python, Flask
