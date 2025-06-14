@@ -38,7 +38,7 @@ To run this project, you must configure and run both the backend server and the 
 Clone this repository to your local machine using Git.
 
 ```bash
-git clone [https://github.com/your-username/youtube-summarizer.git](https://github.com/your-username/youtube-summarizer.git)
+git clone [https://github.com/Dar-kSun/youtube-summarizer.git](https://github.com/Dar-kSun/youtube-summarizer.git)
 cd youtube-summarizer
 ```
 
