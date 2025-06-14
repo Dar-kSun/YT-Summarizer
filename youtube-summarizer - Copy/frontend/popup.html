@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Summarizer</title>
+    <!-- The font is now loaded in the CSS file -->
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.252a6.25 6.25 0 0 1 0 11.498A6.25 6.25 0 0 1 12 6.252Z"></path><path d="M12 4v2"></path><path d="M12 18v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m4.93 19.07 1.41-1.41"></path><path d="m17.66 6.34 1.41-1.41"></path></svg>
+            <h1>Summarizer</h1>
+        </div>
+
+        <button id="summarizeBtn" class="summarize-button">
+            <span>Generate Summary</span>
+        </button>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading-container hidden">
+            <div class="spinner"></div>
+            <p>Analyzing video...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error" class="error-container hidden"></div>
+        
+        <!-- Summary Display -->
+        <div id="summaryContainer" class="summary-wrapper hidden">
+            <div id="summary"></div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
